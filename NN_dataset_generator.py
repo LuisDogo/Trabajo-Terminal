@@ -13,9 +13,15 @@ def main():
     df = pd.concat(people)
     df["glucose_t+1"] = df["glucose"].shift(periods = -1)
     df = df.drop(index = 200)
-    df["time"] = df["time"].apply(lambda time: np.datetime64(time))
+    #! por el momento el datetime causa problemas con pytorch, así que lo ignoré, pero pienso reintroducirlo
+    #! porque la correlación de time es de .1 > a las demás variables
+    # t = df["time"].apply(lambda time: np.datetime64(time))
+    # df["hour"] = t.apply(lambda t: t.hour)
+    df = df.drop(columns = ["time"])
+    # df = df.reset_index()
     df.to_csv("Data/Processed/data.csv")
-    
+
+
     return 0
 
 
