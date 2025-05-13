@@ -2,7 +2,7 @@ import numpy as np
 import pandas as pd
 import os, glob
 
-def main():
+def main(period):
     people = []
     path = "Data/Preprocessed/"
     
@@ -11,7 +11,7 @@ def main():
         people.append(df.head(201))
 
     df = pd.concat(people)
-    df["glucose_t+1"] = df["glucose"].shift(periods = -1)
+    df[f"glucose_t+{period}"] = df["glucose"].shift(periods = -period)
     df = df.drop(index = 200)
     #! por el momento el datetime causa problemas con pytorch, así que lo ignoré, pero pienso reintroducirlo
     #! porque la correlación de time es de .1 > a las demás variables
@@ -19,11 +19,12 @@ def main():
     # df["hour"] = t.apply(lambda t: t.hour)
     df = df.drop(columns = ["time"])
     # df = df.reset_index()
-    df.to_csv("Data/Processed/data.csv")
+    df.to_csv(f"Data/Processed/data_t{period}.csv")
 
 
     return 0
 
 
 if __name__ == "__main__":
-    main()
+    period = 3
+    main(period)
