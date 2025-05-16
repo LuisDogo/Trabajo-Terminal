@@ -29,5 +29,5 @@ def main(period, n_rows):
 
 if __name__ == "__main__":
     period = 3
-    n_rows = 200
+    n_rows = 400
     main(period, n_rows)
