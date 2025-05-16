@@ -2,8 +2,7 @@ import numpy as np
 import pandas as pd
 import os, glob
 
-def main(period):
-    n_rows = 200
+def main(period, n_rows):
     people = []
     path = "Data/Preprocessed/"
     
@@ -12,10 +11,9 @@ def main(period):
         people.append(df.head(n_rows + period))
 
     df = pd.concat(people)
-    print(df.loc[199,:])
     df[f"glucose_t+{period}"] = df["glucose"].shift(periods = -period)
-    df = df.drop(index = n_rows + period - 1)
-    print(df.loc[199,:])
+    sobrante = [n_rows + i for i in range(period)]
+    df = df.drop(index = sobrante)
 
     #! por el momento el datetime causa problemas con pytorch, así que lo ignoré, pero pienso reintroducirlo
     #! porque la correlación de time es de .1 > a las demás variables
@@ -30,5 +28,6 @@ def main(period):
 
 
 if __name__ == "__main__":
-    period = 1
-    main(period)
+    period = 3
+    n_rows = 200
+    main(period, n_rows)
